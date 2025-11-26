@@ -1,27 +1,23 @@
-# Mission Course Week1
+안녕하세요! AI 프로젝트 미션 트랙에 오신 것을 환영합니다! 
 
-안녕하세요! AI 프로젝트 미션 트랙에 오신 것을 환영합니다!
-
-저희는 앞으로 **4주간의 미션 코스**를 통해, 미니 프로젝트 **“AI 감정 분석 프로젝트”** 를 함께 완성해 나갈 예정이에요.
+저희는 앞으로 **4주간의 미션 코스**를 통해, 미니 프로젝트 **“AI 감정 분석 프로젝트”** 를 함께 완성해 나갈 예정이에요. 
 
 이번 **Week 1**에서는 인공지능이 텍스트 데이터를 이해할 수 있도록 만드는 과정, 즉 **데이터 전처리(Preprocessing)** 를 배웁니다.
 
-AI 모델은 사람이 쓰는 문장을 그대로 이해하지 못합니다. 그래서 문장을 숫자로 바꾸는 “언어의 번역기” 역할을 하는 **전처리 과정**을 거쳐야 해요.
+AI 모델은 사람이 쓰는 문장을 그대로 이해하지 못합니다. 그래서 문장을 숫자로 바꾸는 “언어의 번역기” 역할을 하는 **전처리 과정**을 거쳐야 해요. 
 
 이번 주차에서는 이 과정을 단계별 코드 실습을 통해 직접 경험해보아요!
 
-### 학습 목표
+### 이번 주차의 학습 목표
 
-- **텍스트 데이터의 구조 이해:**
-  네이버 영화 리뷰(NSMC) 데이터를 분석해 `id`, `document`, `label`의 의미를 파악합니다.
-- **데이터 분리:**
-  전체 데이터에서 **입력(X)** 과 **정답(Y)** 을 분리하여, **지도학습(Supervised Learning)** 의 기본 구조를 익힙니다.
-- **전처리 파이프라인 구축:**
-  `TextVectorization` 레이어를 사용하여, 문장을 **숫자 시퀀스(벡터)** 로 변환하고, 모델이 처리할 수 있도록 **패딩(Padding)** 과 **어휘 사전(Vocabulary)** 을 구성합니다.
-- **데이터 시각화:**
-  `Matplotlib`을 활용해 문장 길이 분포를 시각화하고, 전처리 설정(`MAX_LEN`)이 데이터 특성과 잘 맞는지 확인합니다.
+- 텍스트 데이터의 구조 이해
+- 데이터 분리
+- 전처리 파이프라인 구축
+- 데이터 시각화
+    
+    
 
-### 미션 내용
+### Mission
 
 ```python
 # 라이브러리 import 및 TensorFlow 버전 확인
@@ -35,7 +31,7 @@ print("TensorFlow version:", tf.__version__)
 
 실습을 위한 기본 라이브러리(**Numpy, Pandas, TensorFlow**)를 불러오고 현재 TensorFlow 버전을 출력하는 과정입니다. Colab 환경에서 실습을 준비하기 위한 첫 단계입니다.
 
-[ ] 기본 라이브러리(**Numpy, Pandas, TensorFlow**) 개념에 대해서 정리해주세요.
+- [ ]  기본 라이브러리(**Numpy, Pandas, TensorFlow**) 개념에 대해서 정리해주세요.
 
 ```python
 # 데이터 다운로드
@@ -51,7 +47,7 @@ path_to_test_file = tf.keras.utils.get_file(
 
 TensorFlow의 `keras.utils` 모듈을 이용해 네이버 영화 리뷰(NSMC) 데이터를 자동으로 다운로드하는 단계입니다.
 
-[ ] **Keras**가 무엇인지 알아보고, **TensorFlow 와 Keras의 역할 관계**에 대해서 정리해주세요.
+- [ ]  **Keras**가 무엇인지 알아보고, **TensorFlow 와 Keras의 역할 관계**에 대해서 정리해주세요.
 
 ```python
 # IN - 텍스트로 로드
@@ -69,11 +65,11 @@ test_text = open(path_to_test_file, 'rb').read().decode(encoding='utf-8')
 
 print('Length of train text: {} characters'.format(len(train_text)))
 print('Length of test text: {} characters'.format(len(test_text)))
-print(train_text[:300])
+print(train_text[:300]) 
 ```
 
 ```python
-# OUT
+# OUT 
 Length of train text: 6937271 characters
 Length of test text: 2318260 characters
 id	document	label
@@ -86,11 +82,10 @@ id	document	label
 7797314	원작의
 ```
 
-다운로드한 데이터를 실제 텍스트로 읽어오는 과정입니다. `rb`는 파일을 바이너리 모드로 읽겠다는 뜻이고, `.decode('utf-8')` 은 한국어가 깨지지 않도록 UTF-8 인코딩으로 변환하는 단계입니다. 처음 300자만 출력하여 결과를 보면, **데이터가 `id`, `document`, `label`형태** (9976970, 아 더빙.. 진짜 짜증나네요 목소리, 0)로 구성되어져 있는 것을 볼 수 있습니다.
+다운로드한 데이터를 실제 텍스트로 읽어오는 과정입니다. `rb`는 파일을 바이너리 모드로 읽겠다는 뜻이고, `.decode('utf-8')` 은 한국어가 깨지지 않도록 UTF-8 인코딩으로 변환하는 단계입니다. 처음 300자만 출력하여 결과를 보면, **데이터가 `id`, `document`, `label`형태** (9976970,	아 더빙.. 진짜 짜증나네요 목소리, 0)로 구성되어져 있는 것을 볼 수 있습니다. 
 
-[ ] **훈련 데이터(train)** 와 **테스트 데이터(test)** 의 개념을 구분하여 정리해주세요.
-
-[ ] **과적합(overfitting)** 이란 무엇이며, 훈련 데이터와 테스트 데이터의 관계에서 어떤 문제가 발생하는지 설명해주세요.
+- [ ]  **훈련 데이터(train)** 와 **테스트 데이터(test)** 의 개념을 구분하여 정리해주세요.
+- [ ]  **과적합(overfitting)**이란 무엇이며, 훈련 데이터와 테스트 데이터의 관계에서 어떤 문제가 발생하는지 설명해주세요.
 
 ```python
 # IN - Y(정답 라벨) 데이터 만들기
@@ -122,23 +117,36 @@ train_Y sample: [[0]
  [1]]
 ```
 
-이 코드는 전체 데이터에서 **정답 라벨(label)** 만 분리하는 과정입니다. 세 번째 항목(`[2]`)이 감정 라벨로, [0]은 **부정 리뷰**, [1]은 **긍정 리뷰**를 의미합니다. 따라서 `split('\t')[2]`를 이용해 세 번째 값인 label을 추출하고, 정수형으로 변환하여 NumPy 배열 형태로 저장합니다. 이렇게 만든 `train_Y` , `test_Y` 는 나중에 모델이 예측할 **정답(타깃)** 역할을 합니다.
+이 코드는 전체 데이터에서 **정답 라벨(label)** 만 분리하는 과정입니다. 세 번째 항목(`[2]`)이 감정 라벨로, [0]은 **부정 리뷰**, [1]은 **긍정 리뷰**를 의미합니다. 따라서 `split('\t')[2]`를 이용해 세 번째 값인  label을 추출하고, 정수형으로 변환하여 NumPy 배열 형태로 저장합니다. 이렇게 만든 `train_Y` , `test_Y` 는 나중에 모델이 예측할 **정답(타깃)**역할을 합니다. 
 
 ```python
-# IN - X(입력 문장) 데이터 추출
-train_text_X = [
-    row.split('\t')[1]
-    for row in train_text.split('\n')[1:]
-    if row.count('\t') > 0
-]
+import re
 
-test_text_X = [
-    row.split('\t')[1]
-    for row in test_text.split('\n')[1:]
-    if row.count('\t') > 0
-]
+def clean_str(string):    
+    string = re.sub(r"[^가-힣A-Za-z0-9(),!?\'\`]", " ", string)
+    string = re.sub(r"\'s", " \'s", string)
+    string = re.sub(r"\'ve", " \'ve", string)
+    string = re.sub(r"n\'t", " n\'t", string)
+    string = re.sub(r"\'re", " \'re", string)
+    string = re.sub(r"\'d", " \'d", string)
+    string = re.sub(r"\'ll", " \'ll", string)
+    string = re.sub(r",", " , ", string)
+    string = re.sub(r"!", " ! ", string)
+    string = re.sub(r"\(", " \( ", string)
+    string = re.sub(r"\)", " \) ", string)
+    string = re.sub(r"\?", " \? ", string)
+    string = re.sub(r"\s{2,}", " ", string)
+    string = re.sub(r"\'{2,}", "\'", string)
+    string = re.sub(r"\'", "", string)
 
-print(train_text_X[:5])
+    return string.lower()
+
+train_text_X = [row.split('\t')[1] for row in train_text.split('\n')[1:] if row.count('\t') > 0]
+train_text_X = [clean_str(sentence) for sentence in train_text_X]
+# 문장을 띄어쓰기 단위로 단어 분리
+sentences = [sentence.split(' ') for sentence in train_text_X]
+for i in range(5):
+    print(sentences[i])
 ```
 
 ```python
@@ -146,11 +154,10 @@ print(train_text_X[:5])
 [['아', '더빙', '진짜', '짜증나네요', '목소리'], ['흠', '포스터보고', '초딩영화줄', '오버연기조', '가볍지', '않구나'], ['너무재밓었'], ['교도소', '이야기구먼', '솔직히', '재미는', '없다', '평점', '조정'], ['사이몬페그', '익살스런', '연기가', '돋보였던', '영화', '!', '스파이더맨', '늙어보이기', '했던', '커스틴', '던스트가', '너무나도', '이뻐보였다']]
 ```
 
-이 코드는 전체 데이터에서 **리뷰 문장(document)** 만 분리하는 과정입니다. 데이터는 `id`, `document`, `label` 형태로 되어 있기 때문에, `split('\t')[1]`을 이용하여 두 번째 항목 리뷰 문장만 추출합니다. 이렇게 분리된 문장은 모델 학습 시 입력 데이터(`train_X`)로 사용됩니다.
+이 코드는 데이터를 정제하고, 전체 데이터에서 **리뷰 문장(document)**만 분리하는 과정입니다. 데이터는 `id`, `document`, `label` 형태로 되어 있기 때문에, `split('\t')[1]`을 이용하여 두 번째 항목 리뷰 문장만 추출합니다. 이렇게 분리된 문장은 모델 학습 시 입력 데이터(`train_X`)로 사용됩니다.
 
-[ ] **지도학습(Supervised Learning)** 의 개념을 구조(X, Y)와 함께 정리해주세요.
-
-[ ] **지도학습과 비지도 학습의 차이점**을 적어주세요.
+- [ ]  **지도학습(Supervised Learning)** 의 개념을 구조(X, Y)와 함께 정리해주세요.
+- [ ]  **지도학습과 비지도 학습의 차이점**을 적어주세요.
 
 ```python
 VOCAB_SIZE = 2000   # 단어 사전 크기
@@ -195,11 +202,9 @@ tf.Tensor(
 
 출력된 `train_X`는 **Tensor** 형태로 **전처리 결과**입니다.
 
-[ ] `TextVectorization`의 개념과 함께 **전처리(Preprocessing)** 의 개념을 정리해주세요.
-
-[ ] **벡터화(Vectorization)** 가 왜 필요한지 정리해주세요.
-
-[ ] **패딩(Padding)** 의 역할을 정리해주세요.
+- [ ]  `TextVectorization`의 개념과 함께 **전처리(Preprocessing)** 의 개념을 정리해주세요.
+- [ ]  **벡터화(Vectorization)** 가 왜 필요한지 정리해주세요.
+- [ ]  **패딩(Padding)** 의 역할을 정리해주세요.
 
 ```python
 import matplotlib.pyplot as plt
@@ -211,6 +216,8 @@ plt.show()
 print(sum([int(l<=25) for l in sentence_len]))
 ```
 
+![image.png](attachment:c6ed0fe1-e7c0-4717-b434-f5fe6b011179:image.png)
+
 우리가 데이터 전처리를 하면서 단어를 `[:25]`로 제한을 걸었던 설정이 실제로 데이터의 대부분을 커버하는지를 **Matplotlib**으로 시각화하여 확인하는 과정입니다.
 
 - `len(sentence)` : 각 문장이 가진 **단어 수(length)** 를 구합니다.
@@ -220,12 +227,27 @@ print(sum([int(l<=25) for l in sentence_len]))
 
 문장 길이를 오름차순으로 정렬해 시각화한 결과, 대부분의 문장이 25단어 이하임을 확인할 수 있습니다.
 
-[ ] 또 다른 대표적인 파이썬 라이브러리인 **Matplotlib** 에 대해서 정리해주세요.
+- [ ]  또 다른 대표적인 파이썬 라이브러리인 **Matplotlib**에 대해서 정리해주세요.
 
-#### TODO
+### TODO
 
-[ ] 각 코드 밑에 있는 미션을 블로그글로 정리해주세요.
+- [ ]  각 코드 밑에 있는 미션을 블로그글로 정리해주세요.
+- [ ]  300자 이상 WIL 작성하기
+- [ ]  코드를 보지 않고 실습하여 `.ipynb`로 저장하여, github에 올려주세요.
 
-[ ] 300자 이내 WIL 작성하기
+### 파일 구조
 
-[ ] 코드를 보지 않고 실습하며, .ipynb형태로 github에 올려주세요.
+```python
+gdg-5th-ai-mission/
+├── articles/
+│   ├── assignment/
+│   │   ├── week1/
+│   │   │   ├── week1_mission.ipynb # 실습 코드 파일
+│   │   │   └── week1.md
+│   │
+│   ├── week1/
+│   │   └── WIL.md # 개념 정리 블로그 글
+│
+└── README.md
+
+```
